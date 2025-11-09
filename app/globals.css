@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+}
+
+/* -------------------------------------
+   📘 Blogartikel Styling (Markdown Content)
+-------------------------------------- */
+
+article {
+  width: 90%;
+  max-width: 95ch;
+  margin: 4rem auto;
+  padding: 2.5rem 3rem;
+  background-color: var(--background);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 1400px) {
+  article {
+    max-width: 110ch; /* auf sehr großen Monitoren etwas breiter */
+  }
+}
+
+
+/* Überschriften */
+article h2,
+article h3 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Absätze */
+article p {
+  margin-bottom: 1.2rem;
+}
+
+/* ✅ Listen aktivieren */
+article ul,
+article ol {
+  margin: 1rem 0 1rem 2rem;
+  padding-left: 1rem;
+  list-style-type: disc;
+}
+
+article ol {
+  list-style-type: decimal;
+}
+
+article li {
+  margin: 0.4rem 0;
+}
+
+/* Zitate */
+article blockquote {
+  border-left: 4px solid #d4a373;
+  padding-left: 1rem;
+  color: #555;
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+
+/* Trennlinien (---) */
+article hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 2.5rem 0;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  article {
+    background-color: #111;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+  }
+
+  article blockquote {
+    color: #ccc;
+    border-left-color: #c9a066;
+  }
+
+  article hr {
+    border-top-color: #333;
+  }
+}
