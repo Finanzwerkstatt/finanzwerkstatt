@@ -16,12 +16,14 @@ export interface Article {
 // 📁 Absoluter Pfad zum Artikelverzeichnis
 const articlesDir = path.join(process.cwd(), "content", "articles");
 
-// 📖 Automatische Lesedauer berechnen (200 Wörter pro Minute)
+
+// 📖 Automatische Lesedauer berechnen (ca. 180 Wörter pro Minute)
 function calculateReadingTime(text: string): string {
   const words = text.trim().split(/\s+/).length;
-  const minutes = Math.max(1, Math.round(words / 180)); // etwas großzügiger gerechnet 😉
-  return `${minutes} ${minutes === 1 ? "Minute" : "Minuten"}`;
+  const minutes = Math.max(1, Math.round(words / 180));
+  return `ca. ${minutes} ${minutes === 1 ? "Minute" : "Minuten"}`;
 }
+
 
 
 export async function getArticles(): Promise<Article[]> {
