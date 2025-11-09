@@ -1,56 +1,93 @@
-import { getArticles, getArticleById } from "@/app/data/getArticles";
-import { marked } from "marked";
+import React from "react";
+import { getArticleById, getArticles } from "@/app/data/getArticles";
+import { notFound } from "next/navigation";
+import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
+type Props = {
+  params: { id: string };
+};
+
+// 🧠 WICHTIG: Diese Funktion erzeugt die statischen Seiten beim Build
 export async function generateStaticParams() {
   const articles = await getArticles();
-  return articles.map((article) => ({ id: article.id }));
+  return articles.map((article) => ({
+    id: article.id,
+  }));
 }
 
-export default async function ArticlePage(props: { params: Promise<{ id: string }> }) {
-  const { id } = await props.params;
-  const article = await getArticleById(id);
+export const dynamicParams = false; // <--- hinzufügen
 
-  if (!article) {
-    return (
-      <div className="text-center py-20 text-gray-600">
-        Artikel nicht gefunden.
-      </div>
-    );
-  }
 
-  const htmlContent = await marked(article.content);
+export default async function ArticlePage({ params }: Props) {
+  const article = await getArticleById(params.id);
+  if (!article) notFound();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#faf7f2] via-[#f7f2ea] to-[#f2ebe1]">
-      {/* 🌿 Abstand nach Header */}
-      <div className="h-6 sm:h-8" />
+    <main className="relative min-h-screen overflow-x-hidden bg-gradient-to-br from-[#f9f4ef] via-[#f5efe6] to-[#f1eadf] dark:from-[#13110d] dark:via-[#171510] dark:to-[#1c1914] text-[#3f3a2f] dark:text-[#f3eee4] transition-colors duration-300">
+      {/* Hintergrunddeko */}
+      <div className="absolute -top-40 -left-40 w-[400px] h-[400px] bg-[#d4a373]/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#b07a4a]/15 rounded-full blur-3xl" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-14">
-        <article className="relative bg-white shadow-lg rounded-xl sm:rounded-2xl border border-[#e5dcc7]/60 p-6 sm:p-8 md:p-10 overflow-hidden">
-          {/* 🌸 Dekor nur auf größeren Screens */}
-          <div className="hidden md:block absolute -left-10 top-0 bottom-0 w-20 bg-gradient-to-r from-[#f4eee2] to-transparent opacity-70" />
-          <div className="hidden md:block absolute -right-10 top-0 bottom-0 w-20 bg-gradient-to-l from-[#f4eee2] to-transparent opacity-70" />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <article className="backdrop-blur-md bg-[#fffaf3]/90 dark:bg-[#1e1b16]/80 rounded-3xl shadow-lg p-6 sm:p-10 border border-[#e7d8c5]/50 dark:border-[#3a3328]/60 transition">
+          
+          <Link
+            href="/articles"
+            className="inline-flex items-center gap-2 text-[#b07a4a] dark:text-[#d4a373] hover:underline mb-6 sm:mb-8 text-sm sm:text-base"
+          >
+            <ArrowLeft size={18} />
+            Zurück zu den Artikeln
+          </Link>
 
-          {/* 🧭 Header */}
-          <header className="mb-6 sm:mb-8 border-b border-gray-200 pb-3 sm:pb-4 relative z-10">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 leading-tight">
-              {article.title}
-            </h1>
-            <p className="text-xs sm:text-sm text-gray-500">
-              {article.date} • {article.readingTime}
-            </p>
-          </header>
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 sm:mb-4 leading-snug text-center sm:text-left">
+            {article.title}
+          </h1>
 
-          {/* 📖 Inhalt */}
-          <section
-            className="prose prose-base sm:prose-lg prose-slate max-w-none leading-relaxed relative z-10 text-[#3f3a2f]"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-[#7d7663] dark:text-[#b9b3a6] text-sm mb-8">
+            <div className="flex items-center gap-2">
+              <Calendar size={16} /> {article.date}
+            </div>
+            {article.readingTime && (
+              <div className="flex items-center gap-2">
+                <Clock size={16} /> {article.readingTime}
+              </div>
+            )}
+          </div>
+
+          {article.image && (
+            <div className="mb-10 flex justify-center">
+              <Image
+                src={article.image}
+                alt={article.title}
+                width={900}
+                height={500}
+                className="w-full max-w-3xl h-auto object-cover rounded-2xl shadow-md"
+                priority
+              />
+            </div>
+          )}
+
+          <div
+            className="prose prose-lg sm:prose-xl max-w-none leading-relaxed
+                       text-[#3f3a2f] dark:text-[#f3eee4]
+                       prose-headings:text-[#3f3a2f] dark:prose-headings:text-[#f5f0e8]
+                       prose-strong:text-[#3f3a2f] dark:prose-strong:text-[#f5f0e8]
+                       prose-a:text-[#b07a4a] dark:prose-a:text-[#d4a373] hover:prose-a:underline
+                       prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto
+                       prose-li:marker:text-[#b07a4a] dark:prose-li:marker:text-[#d4a373]"
+            dangerouslySetInnerHTML={{ __html: article.content }}
           />
 
-          {/* ⚙️ Footer */}
-          <footer className="mt-10 sm:mt-12 pt-5 sm:pt-6 border-t border-gray-200 text-gray-500 text-xs sm:text-sm text-center relative z-10">
-            © {new Date().getFullYear()} FinanzWerkstatt · Alle Rechte vorbehalten
-          </footer>
+          <div className="mt-12 sm:mt-16 text-center">
+            <Link
+              href="/articles"
+              className="inline-block bg-[#d4a373] hover:bg-[#b07a4a] dark:bg-[#a8774e] dark:hover:bg-[#8a5f3a] text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full font-medium text-sm sm:text-base shadow transition"
+            >
+              ← Zurück zur Übersicht
+            </Link>
+          </div>
         </article>
       </div>
     </main>
