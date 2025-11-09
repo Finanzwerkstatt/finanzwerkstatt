@@ -24,6 +24,21 @@ export async function generateStaticParams() {
 export const dynamicParams = true; // <--- temporär ändern
  // <--- hinzufügen
 
+export async function generateMetadata({ params }: Props) {
+  const article = await getArticleById(params.id);
+  if (!article) return {};
+
+  return {
+    title: article.title,
+    description: article.excerpt || "Spannender Finanzartikel auf der FinanzWerkstatt.",
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      images: article.image ? [{ url: article.image }] : [],
+      type: "article",
+    },
+  };
+}
 
 export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params; // 🧠 params zuerst auflösen
