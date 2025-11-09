@@ -12,16 +12,23 @@ type Props = {
 // 🧠 WICHTIG: Diese Funktion erzeugt die statischen Seiten beim Build
 export async function generateStaticParams() {
   const articles = await getArticles();
+
+  // 🪶 Debug-Ausgabe:
+  console.log("🧭 Static Params:", articles.map((a) => a.id));
+
   return articles.map((article) => ({
     id: article.id,
   }));
 }
 
-//export const dynamicParams = false; // <--- hinzufügen
+export const dynamicParams = true; // <--- temporär ändern
+ // <--- hinzufügen
 
 
-export default async function ArticlePage({ params }: Props) {
-  const article = await getArticleById(params.id);
+export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params; // 🧠 params zuerst auflösen
+  const article = await getArticleById(id);
+
   if (!article) notFound();
 
   return (

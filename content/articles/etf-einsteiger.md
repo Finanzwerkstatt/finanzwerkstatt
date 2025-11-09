@@ -1,5 +1,4 @@
 ---
-id: "Finanzbildung Einstieg"
 title: "Warum Finanzbildung so wichtig ist (und was du nie in der Schule lernst) | FinanzWerkstatt"
 date: "2. November 2025"
 readingTime: "6 Minuten"

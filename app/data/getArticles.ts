@@ -3,8 +3,6 @@ import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
 
-const articlesDir = path.join(process.cwd(), "content/articles");
-
 export interface Article {
   id: string;
   title: string;
@@ -14,6 +12,9 @@ export interface Article {
   content: string; // HTML
   image?: string;
 }
+
+// 📁 Absoluter Pfad zum Artikelverzeichnis
+const articlesDir = path.join(process.cwd(), "content", "articles");
 
 export async function getArticles(): Promise<Article[]> {
   // 🔍 Debug-Ausgabe – zeigt alle gefundenen Dateien beim Build
@@ -49,12 +50,7 @@ export async function getArticles(): Promise<Article[]> {
 }
 
 export async function getArticleById(id: string): Promise<Article | null> {
-  // 🛑 Sicherheit: Prüfen, ob eine gültige ID übergeben wurde
- if (!id) {
-  // Kein echtes Problem beim Build – einfach abbrechen, ohne zu warnen
-  return null;
-}
-
+  if (!id) return null;
 
   const filePath = path.join(articlesDir, `${id}.md`);
 
@@ -67,7 +63,6 @@ export async function getArticleById(id: string): Promise<Article | null> {
   const fileContent = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContent);
 
-  // ✅ Markdown → HTML konvertieren
   const htmlContent = await marked(content);
 
   return {
