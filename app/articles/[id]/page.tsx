@@ -17,7 +17,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export const dynamicParams = false; // <--- hinzufügen
+//export const dynamicParams = false; // <--- hinzufügen
 
 
 export default async function ArticlePage({ params }: Props) {

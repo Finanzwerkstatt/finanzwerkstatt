@@ -23,7 +23,7 @@ export default function ArticleList({ articles }: Props) {
     );
   }, [articles, query]);
 
-  const showMore = () => setVisible((v) => v + 6);
+  const showMore = () => setVisible((v) => v + 4);
 
   return (
     <section className="py-8 px-4 sm:px-8 lg:px-16">
@@ -45,22 +45,22 @@ export default function ArticleList({ articles }: Props) {
       </div>
 
       {/* 📰 Artikel-Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
         {filtered.slice(0, visible).map((article) => (
           <article
             key={article.id}
-            className="bg-[#fffaf3] dark:bg-[#1e1b16] border border-[#e7d8c5] dark:border-[#3a3328] rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 p-5 sm:p-6 flex flex-col justify-between"
+            className="bg-[#fffaf3] dark:bg-[#1e1b16] border border-[#e7d8c5] dark:border-[#3a3328] rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 p-6 sm:p-8 flex flex-col justify-between"
           >
             <div>
               <div className="text-xs sm:text-sm font-semibold text-[#b07a4a] dark:text-[#d4a373] uppercase mb-2 tracking-wide">
                 Finanztipps
               </div>
 
-              <h2 className="text-base sm:text-lg font-bold mb-3 text-[#3f3a2f] dark:text-[#f5f0e8] leading-snug">
+              <h2 className="text-lg sm:text-xl font-bold mb-4 text-[#3f3a2f] dark:text-[#f5f0e8] leading-snug">
                 {article.title}
               </h2>
 
-              <div className="flex items-center flex-wrap gap-3 text-[#7d7663] dark:text-[#b9b3a6] text-xs sm:text-sm mb-3">
+              <div className="flex items-center flex-wrap gap-3 text-[#7d7663] dark:text-[#b9b3a6] text-sm mb-4">
                 <div className="flex items-center gap-1">
                   <Calendar size={14} /> {article.date}
                 </div>
@@ -71,14 +71,15 @@ export default function ArticleList({ articles }: Props) {
                 )}
               </div>
 
-              <p className="text-[#4a4538] dark:text-[#d8d3c8] text-sm sm:text-base mb-5 line-clamp-3">
+              {/* Beschreibung ganz anzeigen */}
+              <p className="text-[#4a4538] dark:text-[#d8d3c8] text-sm sm:text-base mb-5">
                 {article.excerpt}
               </p>
             </div>
 
             <Link
               href={`/articles/${article.id}`}
-              className="mt-auto inline-block bg-[#d4a373] hover:bg-[#b07a4a] dark:bg-[#a8774e] dark:hover:bg-[#8a5f3a] text-white px-4 py-2 rounded-full font-medium text-sm text-center shadow transition"
+              className="mt-auto inline-block bg-[#d4a373] hover:bg-[#b07a4a] dark:bg-[#a8774e] dark:hover:bg-[#8a5f3a] text-white px-5 py-2 rounded-full font-medium text-sm text-center shadow transition"
             >
               Weiterlesen →
             </Link>
