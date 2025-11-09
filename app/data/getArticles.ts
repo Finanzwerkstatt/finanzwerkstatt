@@ -16,12 +16,13 @@ export interface Article {
 // 📁 Absoluter Pfad zum Artikelverzeichnis
 const articlesDir = path.join(process.cwd(), "content", "articles");
 
+// 📖 Automatische Lesedauer berechnen (200 Wörter pro Minute)
 function calculateReadingTime(text: string): string {
-  const wordsPerMinute = 200; // Durchschnittliche Lesegeschwindigkeit
-  const wordCount = text.split(/\s+/).length;
-  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.max(1, Math.round(words / 180)); // etwas großzügiger gerechnet 😉
   return `${minutes} ${minutes === 1 ? "Minute" : "Minuten"}`;
 }
+
 
 export async function getArticles(): Promise<Article[]> {
   // 🔍 Debug-Ausgabe – zeigt alle gefundenen Dateien beim Build
@@ -76,7 +77,7 @@ export async function getArticleById(id: string): Promise<Article | null> {
     id,
     title: data.title || "Ohne Titel",
     date: data.date || "Unbekanntes Datum",
-    readingTime: data.readingTime || "",
+    readingTime: data.readingTime || calculateReadingTime(content),
     excerpt: data.excerpt || "",
     content: htmlContent,
     image: data.image || undefined,
