@@ -26,10 +26,10 @@ export default function ArticleList({ articles }: Props) {
   const showMore = () => setVisible((v) => v + 6);
 
   return (
-    <section className="py-8 px-4 sm:px-8 lg:px-16">
+    <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 lg:px-16 bg-gradient-to-b from-[#faf7f2] to-[#f5efe6]">
       {/* 🔍 Suche */}
-      <div className="flex justify-center mb-10">
-        <div className="relative w-full max-w-xl">
+      <div className="flex justify-center mb-8 sm:mb-12">
+        <div className="relative w-full max-w-md sm:max-w-xl">
           <Search
             size={18}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-[#b07a4a]"
@@ -39,42 +39,46 @@ export default function ArticleList({ articles }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Artikel suchen..."
-            className="w-full border border-[#e7d8c5] bg-[#fffaf3] rounded-full py-2 pl-10 pr-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#d4a373] transition"
+            className="w-full border border-[#e7d8c5] bg-[#fffaf3] rounded-full py-2.5 sm:py-3 pl-10 pr-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#d4a373] transition text-sm sm:text-base placeholder:text-[#bfa98a]"
           />
         </div>
       </div>
 
       {/* 📰 Artikel-Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {filtered.slice(0, visible).map((article) => (
           <article
             key={article.id}
-            className="bg-[#fffaf3] border border-[#e7d8c5] rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 p-6"
+            className="bg-white border border-[#e7d8c5] rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between"
           >
-            <div className="text-sm font-semibold text-[#b07a4a] uppercase mb-2 tracking-wide">
-              Finanztipps
-            </div>
-
-            <h2 className="text-lg font-bold mb-3 text-[#3f3a2f] leading-snug">
-              {article.title}
-            </h2>
-
-            <div className="flex items-center gap-4 text-[#7d7663] text-sm mb-3">
-              <div className="flex items-center gap-1">
-                <Calendar size={15} /> {article.date}
+            <div>
+              <div className="text-xs sm:text-sm font-semibold text-[#b07a4a] uppercase mb-2 tracking-wide">
+                Finanztipps
               </div>
-              <div className="flex items-center gap-1">
-                <Clock size={15} /> {article.readingTime}
-              </div>
-            </div>
 
-            <p className="text-[#4a4538] text-sm mb-5 line-clamp-3">
-              {article.excerpt}
-            </p>
+              <h2 className="text-lg sm:text-xl font-bold mb-3 text-[#3f3a2f] leading-snug line-clamp-2">
+                {article.title}
+              </h2>
+
+              <div className="flex items-center flex-wrap gap-3 text-[#7d7663] text-xs sm:text-sm mb-3">
+                <div className="flex items-center gap-1">
+                  <Calendar size={14} /> {article.date}
+                </div>
+                {article.readingTime && (
+                  <div className="flex items-center gap-1">
+                    <Clock size={14} /> {article.readingTime}
+                  </div>
+                )}
+              </div>
+
+              <p className="text-[#4a4538] text-sm sm:text-base mb-5 line-clamp-3">
+                {article.excerpt}
+              </p>
+            </div>
 
             <Link
               href={`/articles/${article.id}`}
-              className="inline-block bg-[#d4a373] hover:bg-[#b07a4a] text-white px-4 py-2 rounded-full font-medium text-sm shadow transition"
+              className="mt-auto inline-block bg-[#d4a373] hover:bg-[#b07a4a] text-white px-4 py-2 rounded-full font-medium text-sm text-center shadow-sm hover:shadow transition"
             >
               Weiterlesen →
             </Link>
@@ -87,7 +91,7 @@ export default function ArticleList({ articles }: Props) {
         <div className="text-center mt-10">
           <button
             onClick={showMore}
-            className="px-6 py-2 bg-[#d4a373] hover:bg-[#b07a4a] text-white rounded-full font-medium shadow transition"
+            className="px-6 py-2 bg-[#d4a373] hover:bg-[#b07a4a] text-white rounded-full font-medium text-sm sm:text-base shadow-sm hover:shadow transition"
           >
             Mehr anzeigen
           </button>
